@@ -14,21 +14,43 @@ import java.util.Random;
  *
  */
 public class Shuffle {
+private static final String NO_INPUT_MESSAGE = "No size specified; using default value (%d).%n";
+private static final String BAD_INPUT_MESSAGE = "Could not parse, \"%s\" as an int; using default value (%d).%n";
 private static final int DEFAULT_SIZE = 50;
 
   /**
    * @param args Command line arguments; Default size is 50.
    */
   public static void main(String[] args) {
-    int size = (args.length > 0) ? Integer.parseInt(args[0]) : DEFAULT_SIZE;
+    int size = DEFAULT_SIZE;
+    try {
+      size = getSize(args);
+    }catch (NumberFormatException ex) {
+      System.out.printf(BAD_INPUT_MESSAGE, args[0], DEFAULT_SIZE);
+    }catch (ArrayIndexOutOfBoundsException ex) {
+      System.out.printf(NO_INPUT_MESSAGE, DEFAULT_SIZE);
+    
     int [] values = generate(size);
     System.out.println(Arrays.toString(values));
     shuffle(values);
     System.out.println(Arrays.toString(values));    
   }
+  
   /**
    * 
-   * @param size
+   * @param args
+   * @return
+   * @throws ArrayIndexOutOfBoundsException
+   * @throws NumberFormatException
+   */
+  private static int getSize(String[] args)
+    throws ArrayIndexOutOfBoundsException, NumberFormatException{
+    return Integer.parseInt(args[0]);
+    }
+  
+  /**
+   * 
+   * @param size accepts user input of array size
    * @return
    */
 private static int [] generate(int size) {
